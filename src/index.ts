@@ -1,14 +1,13 @@
-import { task } from "hardhat/config";
+import { extendConfig, task } from "hardhat/config";
+
+import "./type-extensions";
 
 import {
   TASK_COMPILE_SOLIDITY_COMPILE_SOLC,
   TASK_COMPILE_SOLIDITY_CHECK_ERRORS,
 } from "hardhat/builtin-tasks/task-names";
 
-import IntervalTree from "node-interval-tree";
-import { analyze } from "solidity-comments";
-
-import { errorCodes } from "./error-codes";
+import type IntervalTree from "node-interval-tree";
 
 interface SolcError {
   severity: string;
@@ -28,7 +27,17 @@ interface IgnoreRange {
 
 const ranges: Record<string, IntervalTree<string>> = {};
 
+extendConfig((config, userConfig) => {
+  config.warnings = {
+    ignoreFiles: userConfig.warnings?.ignoreFiles ?? [],
+  };
+});
+
 task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSuper) => {
+  const { default: IntervalTree } = await import("node-interval-tree");
+  const { analyze } = await import("solidity-comments");
+  const { errorCodes } = await import("./error-codes");
+
   for (const [f, { content }] of Object.entries<{ content: string }>(args.input.sources)) {
     const fileRanges: IgnoreRange[] = [];
 
@@ -67,11 +76,18 @@ task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSu
 });
 
 task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output: any }, hre, runSuper) => {
+  const { ignoreFiles } = hre.config.warnings;
+
   output = {
     ...output,
     errors: output.errors?.filter((e: SolcError) => {
       const { file, start } = e.sourceLocation;
-      return e.severity !== 'warning' || !ranges[file]?.search(start, start).includes(e.errorCode);
+      if (e.severity !== 'warning') {
+        // Make sure not to filter out errors
+        return true;
+      } else {
+        return !ignoreFiles.includes(file) && !ranges[file]?.search(start, start).includes(e.errorCode);
+      }
     }),
   };
   return runSuper({ output, ...params });
