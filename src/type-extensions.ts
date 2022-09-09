@@ -5,10 +5,12 @@ import 'hardhat/types/runtime';
 export interface UserConfig {
   ignore?: Record<string, boolean | string[] | Record<string, boolean>>;
   ignoreFiles?: string[];
+  errors?: boolean | string[];
 }
 
 export interface Config {
   ignore: Record<string, true | string[]>;
+  errors: true | string[];
 }
 
 declare module 'hardhat/types/config' {

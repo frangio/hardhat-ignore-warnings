@@ -1,6 +1,6 @@
 # hardhat-ignore-warnings
 
-This plugin adds ways to ignore Solidity warnings.
+This plugin adds ways to ignore Solidity warnings, and a way to turn remaining warnings into errors.
 
 Actual compilation errors will not be silenced by the plugin.
 
@@ -28,5 +28,17 @@ warnings: {
   },
   // alternatively
   ignoreFiles: ['contracts/LotsOfWarnings.sol'],
+}
+```
+
+### Warnings as errors
+
+In order to turn the remaining warnings into errors, include in your Hardhat configuration:
+
+```
+warnings: {
+  errors: true,
+  // or list specific warnings
+  errors: ['pragma-solidity'];
 }
 ```

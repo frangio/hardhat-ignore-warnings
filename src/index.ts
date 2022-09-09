@@ -40,7 +40,8 @@ extendConfig((config, userConfig) => {
   for (const k of userConfig.warnings?.ignoreFiles ?? []) {
     ignore[k] = true;
   }
-  config.warnings = { ignore };
+  const errors = userConfig.warnings?.errors || [];
+  config.warnings = { ignore, errors };
 });
 
 task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSuper) => {
@@ -86,24 +87,36 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
   const { default: minimatch } = await import('minimatch');
   const { getErrorCode } = await import("./error-codes");
 
-  const { ignore } = hre.config.warnings;
+  const config = hre.config.warnings;
 
   output = {
     ...output,
-    errors: output.errors?.filter((e: SolcError) => {
+    errors: output.errors?.flatMap((e: SolcError) => {
       const { file, start } = e.sourceLocation;
       if (e.severity !== 'warning') {
         // Make sure not to filter out errors
-        return true;
+        return [e];
       } else {
-        const rules = Object.entries(ignore).filter(([p]) => minimatch(file, p));
-        return !(
-          rules.some(([_, i]) =>
+        const fileRules = Object.entries(config.ignore).filter(([p]) => minimatch(file, p)).map((([_, r]) => r));
+        const ignore = (
+          fileRules.some(i =>
             i === true ||
             i.find(id => getErrorCode(id) === e.errorCode)
           ) ||
           ranges[file]?.search(start, start).includes(e.errorCode)
         );
+        if (ignore) {
+          return [];
+        } else {
+          const makeError =
+            config.errors === true ||
+            config.errors.some(id => getErrorCode(id) === e.errorCode);
+          if (makeError) {
+            return [{ ...e, severity: 'error' }];
+          } else {
+            return [e];
+          }
+        }
       }
     }),
   };

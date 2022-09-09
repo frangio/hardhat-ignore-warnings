@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.1.5
+
+- Add a way to turn remaining warnings into errors.
+
 # 0.1.4
 
 - Improve handling of overlapping ignore patterns in the config.
