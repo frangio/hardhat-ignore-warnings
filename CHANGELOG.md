@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.1.4
+
+- Improve handling of overlapping ignore patterns in the config.
+
 # 0.1.3
 
 - Added way to ignore a subset of warnings per file.

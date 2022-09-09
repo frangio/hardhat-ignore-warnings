@@ -96,10 +96,12 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
         // Make sure not to filter out errors
         return true;
       } else {
-        const [_, i] = Object.entries(ignore).find(([p]) => minimatch(file, p)) ?? [];
+        const rules = Object.entries(ignore).filter(([p]) => minimatch(file, p));
         return !(
-          i === true ||
-          i?.find(id => getErrorCode(id) === e.errorCode) ||
+          rules.some(([_, i]) =>
+            i === true ||
+            i.find(id => getErrorCode(id) === e.errorCode)
+          ) ||
           ranges[file]?.search(start, start).includes(e.errorCode)
         );
       }
