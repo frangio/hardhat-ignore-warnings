@@ -4,4 +4,5 @@ export const errorCodes: Record<string, string> = {
   'unused-var': '2072',
   'code-size': '5574',
   'shadowing': '2519',
+  'func-mutability': '2018',
 };
