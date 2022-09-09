@@ -5,6 +5,8 @@ export const errorCodes: Record<string, string> = {
   'code-size': '5574',
   'shadowing': '2519',
   'func-mutability': '2018',
+  'license': '1878',
+  'pragma-solidity': '3420',
 };
 
 export function getErrorCode(id: string): string {

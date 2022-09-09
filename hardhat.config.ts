@@ -12,6 +12,8 @@ export default <HardhatUserConfig> {
   warnings: {
     ignore: {
       'contracts/Ignored.sol': true,
+      'contracts/IgnoredLicense.sol': ['license'],
+      'contracts/IgnoredPragma.sol': { 'pragma-solidity': true },
     },
   },
 };

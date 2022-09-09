@@ -3,6 +3,7 @@
 # 0.1.3
 
 - Added way to ignore a subset of warnings per file.
+- Added `license` and `pragma-solidity` warning ids.
 
 # 0.1.2
 
