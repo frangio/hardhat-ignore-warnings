@@ -10,8 +10,8 @@ export default <HardhatUserConfig> {
     dontOverrideCompile: true,
   },
   warnings: {
-    ignoreFiles: [
-      'contracts/Ignored.sol',
-    ],
+    ignore: {
+      'contracts/Ignored.sol': true,
+    },
   },
 };

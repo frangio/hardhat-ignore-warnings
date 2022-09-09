@@ -19,6 +19,7 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
+    "minimatch": "^5.1.0",
     "node-interval-tree": "^2.0.1",
     "solidity-comments": "^0.0.2"
   }

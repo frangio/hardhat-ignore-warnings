@@ -2,8 +2,13 @@
 import 'hardhat/types/config';
 import 'hardhat/types/runtime';
 
+export interface UserConfig {
+  ignore?: Record<string, boolean | string[] | Record<string, boolean>>;
+  ignoreFiles?: string[];
+}
+
 export interface Config {
-  ignoreFiles: string[];
+  ignore: Record<string, true | string[]>;
 }
 
 declare module 'hardhat/types/config' {
@@ -12,7 +17,7 @@ declare module 'hardhat/types/config' {
   // We extend the UserConfig type, which represents the config as written
   // by the users. Things are normally optional here.
   export interface HardhatUserConfig {
-    warnings?: Config;
+    warnings?: UserConfig;
   }
 
   // We also extend the Config type, which represents the configuration

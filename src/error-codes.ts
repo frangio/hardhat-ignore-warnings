@@ -6,3 +6,11 @@ export const errorCodes: Record<string, string> = {
   'shadowing': '2519',
   'func-mutability': '2018',
 };
+
+export function getErrorCode(id: string): string {
+  const code = errorCodes[id] ?? id;
+  if (!/^\d+$/.test(code)) {
+    throw new Error(`Invalid error code for solc-ignore (${code})`)
+  }
+  return code;
+}

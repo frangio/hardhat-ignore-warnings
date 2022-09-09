@@ -8,6 +8,7 @@ import {
 } from "hardhat/builtin-tasks/task-names";
 
 import type IntervalTree from "node-interval-tree";
+import type { Config } from "./type-extensions";
 
 interface SolcError {
   severity: string;
@@ -22,21 +23,30 @@ interface SolcError {
 interface IgnoreRange {
   start: number;
   end: number;
-  rule: string;
+  code: string;
 }
 
 const ranges: Record<string, IntervalTree<string>> = {};
 
 extendConfig((config, userConfig) => {
-  config.warnings = {
-    ignoreFiles: userConfig.warnings?.ignoreFiles ?? [],
-  };
+  const ignore: Config['ignore'] = {};
+  for (const [k, v] of Object.entries(userConfig.warnings?.ignore ?? {})) {
+    if (Array.isArray(v) || v === true) {
+      ignore[k] = v;
+    } else if (typeof v === 'object') {
+      ignore[k] = Object.keys(v).filter(i => v[i]);
+    }
+  }
+  for (const k of userConfig.warnings?.ignoreFiles ?? []) {
+    ignore[k] = true;
+  }
+  config.warnings = { ignore };
 });
 
 task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSuper) => {
   const { default: IntervalTree } = await import("node-interval-tree");
   const { analyze } = await import("solidity-comments");
-  const { errorCodes } = await import("./error-codes");
+  const { getErrorCode } = await import("./error-codes");
 
   for (const [f, { content }] of Object.entries<{ content: string }>(args.input.sources)) {
     const fileRanges: IgnoreRange[] = [];
@@ -48,16 +58,13 @@ task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSu
       const t = c.text.replace(/^\/\/\s+/, '');
       const m = t.match(/^solc-ignore-next-line (.*)/);
       if (m) {
-        const rules = m[1]!.trim().split(/\s+/);
+        const ids = m[1]!.trim().split(/\s+/);
         const start = c.end + 1;
         const nextNewline = buf.indexOf('\n', start);
         const end = nextNewline >= 0 ? nextNewline : buf.length;
-        for (const ruleName of rules) {
-          const rule = errorCodes[ruleName] ?? ruleName;
-          if (!/^\d+$/.test(rule)) {
-            throw new Error(`Invalid error code for solc-ignore (${rule})`)
-          }
-          fileRanges.push({ start, end, rule });
+        for (const id of ids) {
+          const code = getErrorCode(id);
+          fileRanges.push({ start, end, code });
         }
       }
     }
@@ -66,8 +73,8 @@ task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSu
       delete ranges[f];
     } else {
       const tree = ranges[f] = new IntervalTree();
-      for (const { start, end, rule } of fileRanges) {
-        tree.insert(start, end, rule);
+      for (const { start, end, code } of fileRanges) {
+        tree.insert(start, end, code);
       }
     }
   }
@@ -76,7 +83,10 @@ task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSu
 });
 
 task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output: any }, hre, runSuper) => {
-  const { ignoreFiles } = hre.config.warnings;
+  const { default: minimatch } = await import('minimatch');
+  const { getErrorCode } = await import("./error-codes");
+
+  const { ignore } = hre.config.warnings;
 
   output = {
     ...output,
@@ -86,7 +96,12 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
         // Make sure not to filter out errors
         return true;
       } else {
-        return !ignoreFiles.includes(file) && !ranges[file]?.search(start, start).includes(e.errorCode);
+        const [_, i] = Object.entries(ignore).find(([p]) => minimatch(file, p)) ?? [];
+        return !(
+          i === true ||
+          i?.find(id => getErrorCode(id) === e.errorCode) ||
+          ranges[file]?.search(start, start).includes(e.errorCode)
+        );
       }
     }),
   };
