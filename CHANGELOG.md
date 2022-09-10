@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.1.6
+
+- Fix bug with errors that have no source location.
+
 # 0.1.5
 
 - Add a way to turn remaining warnings into errors.

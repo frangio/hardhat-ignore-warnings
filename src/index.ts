@@ -13,7 +13,7 @@ import type { Config } from "./type-extensions";
 interface SolcError {
   severity: string;
   errorCode: string;
-  sourceLocation: {
+  sourceLocation?: {
     file: string;
     start: number;
     end: number;
@@ -92,30 +92,29 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
   output = {
     ...output,
     errors: output.errors?.flatMap((e: SolcError) => {
-      const { file, start } = e.sourceLocation;
-      if (e.severity !== 'warning') {
-        // Make sure not to filter out errors
+      // Make sure not to filter out errors
+      if (e.severity !== 'warning' || !e.sourceLocation) {
         return [e];
+      }
+      const { file, start } = e.sourceLocation;
+      const fileRules = Object.entries(config.ignore).filter(([p]) => minimatch(file, p)).map((([_, r]) => r));
+      const ignore = (
+        fileRules.some(i =>
+          i === true ||
+          i.find(id => getErrorCode(id) === e.errorCode)
+        ) ||
+        ranges[file]?.search(start, start).includes(e.errorCode)
+      );
+      if (ignore) {
+        return [];
       } else {
-        const fileRules = Object.entries(config.ignore).filter(([p]) => minimatch(file, p)).map((([_, r]) => r));
-        const ignore = (
-          fileRules.some(i =>
-            i === true ||
-            i.find(id => getErrorCode(id) === e.errorCode)
-          ) ||
-          ranges[file]?.search(start, start).includes(e.errorCode)
-        );
-        if (ignore) {
-          return [];
+        const makeError =
+          config.errors === true ||
+          config.errors.some(id => getErrorCode(id) === e.errorCode);
+        if (makeError) {
+          return [{ ...e, severity: 'error' }];
         } else {
-          const makeError =
-            config.errors === true ||
-            config.errors.some(id => getErrorCode(id) === e.errorCode);
-          if (makeError) {
-            return [{ ...e, severity: 'error' }];
-          } else {
-            return [e];
-          }
+          return [e];
         }
       }
     }),
