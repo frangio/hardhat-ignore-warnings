@@ -1,18 +1,15 @@
-import { HardhatUserConfig } from "hardhat/config";
+import { HardhatUserConfig } from 'hardhat/config';
 
-import "@nomicfoundation/hardhat-toolbox";
+import '@nomicfoundation/hardhat-toolbox';
 
-import "./src";
+import './src/plugin';
 
 export default <HardhatUserConfig> {
   solidity: "0.8.9",
   warnings: {
-    errors: true,
-    ignore: {
-      'contracts/Ignored.sol': true,
-      'contracts/IgnoredLicense.sol': ['license'],
-      'contracts/IgnoredPragma.sol': { 'pragma-solidity': true },
-    },
+    'Ignored.sol': 'off',
+    'contracts/IgnoredLicense.sol': { 'license': 'off' },
+    'contracts/IgnoredPragma.sol': { 'pragma-solidity': false },
   },
   typechain: {
     dontOverrideCompile: true,

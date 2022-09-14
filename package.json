@@ -4,7 +4,7 @@
   "description": "Hardhat plugin to ignore Solidity warnings",
   "author": "Francisco Giordano <fg@frang.io>",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/plugin.js",
   "files": [
     "dist",
     "src"

@@ -1,59 +1,71 @@
-import { extendConfig, task } from "hardhat/config";
+import { lazyObject } from 'hardhat/plugins';
+import minimatch from 'minimatch';
+import IntervalTree from 'node-interval-tree';
+import { analyze } from 'solidity-comments';
+import { getErrorCode } from './error-codes';
+import { Config, FileRules, WarningRule } from './type-extensions';
 
-import "./type-extensions";
+const defaultRule: NormalizedWarningRule = 'warn';
 
-import {
-  TASK_COMPILE_SOLIDITY_COMPILE_SOLC,
-  TASK_COMPILE_SOLIDITY_CHECK_ERRORS,
-} from "hardhat/builtin-tasks/task-names";
+type NormalizedWarningRule = WarningRule & string;
 
-import type IntervalTree from "node-interval-tree";
-import type { Config } from "./type-extensions";
+type NormalizedFileRules = {
+  [e in number]?: NormalizedWarningRule;
+} & {
+  default?: NormalizedWarningRule;
+};
+
+type SortedFileRules = {
+  pattern: string;
+  rules: NormalizedFileRules;
+}[];
 
 interface SolcError {
   severity: string;
   errorCode: string;
-  sourceLocation?: {
-    file: string;
-    start: number;
-    end: number;
-  };
+  sourceLocation?: SourceLocation;
+}
+
+interface SourceLocation {
+  file: string;
+  start: number;
+  end: number;
 }
 
 interface IgnoreRange {
   start: number;
   end: number;
-  code: string;
+  code: number;
 }
 
-const ranges: Record<string, IntervalTree<string>> = {};
+export class WarningClassifier {
+  private rules: SortedFileRules;
+  private ignoreRanges: Record<string, IntervalTree<number>> = {};
 
-extendConfig((config, userConfig) => {
-  const ignore: Config['ignore'] = {};
-  for (const [k, v] of Object.entries(userConfig.warnings?.ignore ?? {})) {
-    if (Array.isArray(v) || v === true) {
-      ignore[k] = v;
-    } else if (typeof v === 'object') {
-      ignore[k] = Object.keys(v).filter(i => v[i]);
+  constructor(private config: Config) {
+    this.rules = lazyObject(() => sortFileRules(config));
+  }
+
+  getWarningRule(errorCode: number, sourceLocation: SourceLocation): NormalizedWarningRule {
+    const { file, start } = sourceLocation;
+    const ignored = this.ignoreRanges[file]?.search(start, start).includes(errorCode);
+    if (ignored) {
+      return 'off';
     }
+    for (const rule of this.rules) {
+      if (minimatch(file, rule.pattern, { matchBase: true })) {
+        const r = rule.rules[errorCode] ?? rule.rules.default;
+        if (r) return r;
+      }
+    }
+    return defaultRule;
   }
-  for (const k of userConfig.warnings?.ignoreFiles ?? []) {
-    ignore[k] = true;
-  }
-  const errors = userConfig.warnings?.errors || [];
-  config.warnings = { ignore, errors };
-});
 
-task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSuper) => {
-  const { default: IntervalTree } = await import("node-interval-tree");
-  const { analyze } = await import("solidity-comments");
-  const { getErrorCode } = await import("./error-codes");
+  reprocessFile(file: string, contents: string) {
+    const ranges: IgnoreRange[] = [];
 
-  for (const [f, { content }] of Object.entries<{ content: string }>(args.input.sources)) {
-    const fileRanges: IgnoreRange[] = [];
-
-    const { comments } = analyze(content);
-    const buf = Buffer.from(content, 'utf8');
+    const { comments } = analyze(contents);
+    const buf = Buffer.from(contents, 'utf8');
 
     for (const c of comments) {
       const t = c.text.replace(/^\/\/\s+/, '');
@@ -65,59 +77,49 @@ task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSu
         const end = nextNewline >= 0 ? nextNewline : buf.length;
         for (const id of ids) {
           const code = getErrorCode(id);
-          fileRanges.push({ start, end, code });
+          ranges.push({ start, end, code });
         }
       }
     }
 
-    if (fileRanges.length === 0) {
-      delete ranges[f];
+    if (ranges.length === 0) {
+      delete this.ignoreRanges[file];
     } else {
-      const tree = ranges[f] = new IntervalTree();
-      for (const { start, end, code } of fileRanges) {
+      const tree = this.ignoreRanges[file] = new IntervalTree();
+      for (const { start, end, code } of ranges) {
         tree.insert(start, end, code);
       }
     }
   }
+}
 
-  return runSuper(args);
-});
+const normalizeWarningRule =
+  (r?: WarningRule, def: NormalizedWarningRule = 'warn') => r === true ? def : r === false ? 'off' : r;
 
-task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output: any }, hre, runSuper) => {
-  const { default: minimatch } = await import('minimatch');
-  const { getErrorCode } = await import("./error-codes");
+function normalizeFileRules(rules: WarningRule | FileRules) {
+  if (typeof rules === 'object') {
+    const def = normalizeWarningRule(rules.default);
+    const res: NormalizedFileRules = {};
+    for (const [id, r] of Object.entries(rules)) {
+      const code = id === 'default' ? id : getErrorCode(id);
+      res[code] = normalizeWarningRule(r, def);
+    }
+    return res;
+  } else {
+    return {
+      default: normalizeWarningRule(rules),
+    };
+  }
+}
 
-  const config = hre.config.warnings;
-
-  output = {
-    ...output,
-    errors: output.errors?.flatMap((e: SolcError) => {
-      // Make sure not to filter out errors
-      if (e.severity !== 'warning' || !e.sourceLocation) {
-        return [e];
-      }
-      const { file, start } = e.sourceLocation;
-      const fileRules = Object.entries(config.ignore).filter(([p]) => minimatch(file, p)).map((([_, r]) => r));
-      const ignore = (
-        fileRules.some(i =>
-          i === true ||
-          i.find(id => getErrorCode(id) === e.errorCode)
-        ) ||
-        ranges[file]?.search(start, start).includes(e.errorCode)
-      );
-      if (ignore) {
-        return [];
-      } else {
-        const makeError =
-          config.errors === true ||
-          config.errors.some(id => getErrorCode(id) === e.errorCode);
-        if (makeError) {
-          return [{ ...e, severity: 'error' }];
-        } else {
-          return [e];
-        }
-      }
-    }),
-  };
-  return runSuper({ output, ...params });
-});
+function sortFileRules(config: Config): SortedFileRules {
+  const rules = Object.entries(config).map(([pattern, rules]) => ({ pattern, rules: normalizeFileRules(rules) }));
+  rules.sort((a, b) => (
+    minimatch(a.pattern, b.pattern)
+    ? -1
+    : minimatch(b.pattern, a.pattern)
+    ? +1
+    :  0
+  ));
+  return rules;
+}

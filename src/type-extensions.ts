@@ -2,31 +2,23 @@
 import 'hardhat/types/config';
 import 'hardhat/types/runtime';
 
-export interface UserConfig {
-  ignore?: Record<string, boolean | string[] | Record<string, boolean>>;
-  ignoreFiles?: string[];
-  errors?: boolean | string[];
-}
+import type { WarningId } from './error-codes';
 
-export interface Config {
-  ignore: Record<string, true | string[]>;
-  errors: true | string[];
-}
+export type WarningRule = boolean | 'warn' | 'error' | 'off';
+
+export type FileRules = {
+  [e in WarningId]?: WarningRule;
+} & {
+  default?: WarningRule;
+};
+
+export type Config = Record<string, WarningRule | FileRules>;
 
 declare module 'hardhat/types/config' {
-  // This is an example of an extension to one of the Hardhat config values.
-
-  // We extend the UserConfig type, which represents the config as written
-  // by the users. Things are normally optional here.
   export interface HardhatUserConfig {
-    warnings?: UserConfig;
+    warnings?: Config;
   }
 
-  // We also extend the Config type, which represents the configuration
-  // after it has been resolved. This is the type used during the execution
-  // of tasks, tests and scripts.
-  // Normally, you don't want things to be optional here. As you can apply
-  // default values using the extendConfig function.
   export interface HardhatConfig {
     warnings: Config;
   }

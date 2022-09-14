@@ -1,18 +1,24 @@
-export const errorCodes: Record<string, string> = {
-  'unreachable': '5740',
-  'unused-param': '5667',
-  'unused-var': '2072',
-  'code-size': '5574',
-  'shadowing': '2519',
-  'func-mutability': '2018',
-  'license': '1878',
-  'pragma-solidity': '3420',
-};
+export const errorCodes = {
+  'unreachable': 5740,
+  'unused-param': 5667,
+  'unused-var': 2072,
+  'code-size': 5574,
+  'shadowing': 2519,
+  'func-mutability': 2018,
+  'license': 1878,
+  'pragma-solidity': 3420,
+} as const;
 
-export function getErrorCode(id: string): string {
-  const code = errorCodes[id] ?? id;
-  if (!/^\d+$/.test(code)) {
-    throw new Error(`Invalid error code for solc-ignore (${code})`)
+export type WarningId = number | keyof typeof errorCodes;
+
+export function getErrorCode(id: string): number {
+  let code = (errorCodes as Record<string, number>)[id] ?? id;
+  if (typeof code === 'string') {
+    if (/^\d+$/.test(code)) {
+      code = Number(code);
+    } else {
+      throw new Error(`Invalid error code for solc-ignore (${code})`)
+    }
   }
   return code;
 }

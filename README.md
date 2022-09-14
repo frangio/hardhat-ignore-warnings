@@ -4,6 +4,8 @@ This plugin adds ways to ignore Solidity warnings, and a way to turn remaining w
 
 Actual compilation errors will not be silenced by the plugin.
 
+For warning ids refer to [`error-codes.ts`](./src/error-codes.ts).
+
 ### Inline comments
 
 ```solidity
@@ -11,34 +13,35 @@ Actual compilation errors will not be silenced by the plugin.
 function bar(uint x) public {
 ```
 
-For warning names refer to [`error-codes.ts`](./src/error-codes.ts).
+### Configuration
 
-### Whole files
+In order to ignore warnings or promote to errors across the entire project or in entire files, the plugin can be configured in your Hardhat config file.
 
-Include in your Hardhat configuration:
+The config is an object that maps glob patterns to warning rules. These rules will be applied to files matched by the glob pattern. More specific patterns override the rules of less specific ones.
+
+A warning can be set to `'off'`, `'error'` (promote to error), or `'warn'` (the default), as well as `false` (meaning `'off'`) and `true` (meaning the local default, or `'warn'` if none is set).
+
+The special id `default` can be used to apply a setting to all warnings at once.
 
 ```javascript
 warnings: {
-  ignore: {
-    'contracts/test/**/*': ['code-size'],
-    // alternatively
-    'contracts/test/**/*': { 'code-size': true },
+  // make every warning an error:
+  '*': 'error',
 
-    'contracts/LotsOfWarnings.sol': true,
+  // equivalently:
+  '*': {
+    default: 'error',
   },
-  // alternatively
-  ignoreFiles: ['contracts/LotsOfWarnings.sol'],
-}
-```
 
-### Warnings as errors
+  // add an exception for a particular warning id:
+  '*': {
+    'code-size': 'warn',
+    default: 'error',
+  },
 
-In order to turn the remaining warnings into errors, include in your Hardhat configuration:
-
-```
-warnings: {
-  errors: true,
-  // or list specific warnings
-  errors: ['pragma-solidity'];
+  // turn off all warnings under a directory:
+  'contracts/test/**/*': {
+    default: 'off',
+  },
 }
 ```

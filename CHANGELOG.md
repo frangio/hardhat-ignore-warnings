@@ -1,16 +1,20 @@
 # Changelog
 
+# 0.2.0
+
+- Changed the configuration format. See the readme for a description.
+
 # 0.1.6
 
-- Fix bug with errors that have no source location.
+- Fixed bug with errors that have no source location.
 
 # 0.1.5
 
-- Add a way to turn remaining warnings into errors.
+- Added a way to turn remaining warnings into errors.
 
 # 0.1.4
 
-- Improve handling of overlapping ignore patterns in the config.
+- Improved handling of overlapping ignore patterns in the config.
 
 # 0.1.3
 
