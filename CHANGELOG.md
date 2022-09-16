@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.1
+
+- Added `shadowing-builtin` warning id.
+
 # 0.2.0
 
 - Changed the configuration format. See the readme for a description.

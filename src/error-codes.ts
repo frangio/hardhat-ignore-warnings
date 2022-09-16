@@ -4,6 +4,7 @@ export const errorCodes = {
   'unused-var': 2072,
   'code-size': 5574,
   'shadowing': 2519,
+  'shadowing-builtin': 2319,
   'func-mutability': 2018,
   'license': 1878,
   'pragma-solidity': 3420,
