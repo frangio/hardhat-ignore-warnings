@@ -115,9 +115,9 @@ function normalizeFileRules(rules: WarningRule | FileRules) {
 function sortFileRules(config: Config): SortedFileRules {
   const rules = Object.entries(config).map(([pattern, rules]) => ({ pattern, rules: normalizeFileRules(rules) }));
   rules.sort((a, b) => (
-    minimatch(a.pattern, b.pattern)
+    minimatch(a.pattern, b.pattern, { matchBase: true })
     ? -1
-    : minimatch(b.pattern, a.pattern)
+    : minimatch(b.pattern, a.pattern, { matchBase: true })
     ? +1
     :  0
   ));

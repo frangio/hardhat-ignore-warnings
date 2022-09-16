@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.2
+
+- Fixed specificity sorting of config patterns.
+
 # 0.2.1
 
 - Added `shadowing-builtin` warning id.
