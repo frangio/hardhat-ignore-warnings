@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.3
+
+- Added `shadowing-opcode` warning id.
+
 # 0.2.2
 
 - Fixed specificity sorting of config patterns.
