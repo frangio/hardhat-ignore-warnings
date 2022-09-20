@@ -5,6 +5,7 @@ export const errorCodes = {
   'code-size': 5574,
   'shadowing': 2519,
   'shadowing-builtin': 2319,
+  'shadowing-opcode': 8261,
   'func-mutability': 2018,
   'license': 1878,
   'pragma-solidity': 3420,
