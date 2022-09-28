@@ -1,0 +1,100 @@
+// Warning 1695: Assertion checker does not yet support this global variable.
+// Warning 1878: SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing "SPDX-License-Identifier: <SPDX-License>" to each source file. Use "SPDX-License-Identifier: UNLICENSED" for non-open-source code. Please see https://spdx.org for more information.
+// Warning 2018: Function state mutability can be restricted to pure
+// Warning 2018: Function state mutability can be restricted to view
+// Warning 2072: Unused local variable.
+// Warning 2264: Experimental features are turned on. Do not use experimental features on live deployments.
+// Warning 2319: This declaration shadows a builtin symbol.
+// Warning 2462: Visibility for constructor is ignored. If you want the contract to be non-deployable, making it "abstract" is sufficient.
+// Warning 2519: This declaration shadows an existing declaration.
+// Warning 3130: Unknown option for "custom:smtchecker": ""
+// Warning 3130: Unknown option for "custom:smtchecker": "abstract-function"
+// Warning 3149: The result type of the exponentiation operation is equal to the type of the first operand (uint8) ignoring the (larger) type of the second operand (int16) which might be unexpected. Silence this warning by either converting the first or the second operand to the type of the other.
+// Warning 3347: Recovered in Statement at ';'.
+// Warning 3445: This function is named "fallback" but is not the fallback function of the contract. If you intend this to be a fallback function, use "fallback(...) { ... }" without the "function" keyword to define it.
+// Warning 3445: This function is named "receive" but is not the receive function of the contract. If you intend this to be a receive function, use "receive(...) { ... }" without the "function" keyword to define it.
+// Warning 3628: This contract has a payable fallback function, but no receive ether function. Consider adding a receive ether function.
+// Warning 3796: Recovered in ContractDefinition at '}'.
+// Warning 3796: Recovered in Statement at ';'.
+// Warning 4013: There are more than 256 errors. Aborting.
+// Warning 4375: Assertion checker does not support recursive structs.
+// Warning 4377: Value for @solidity tag in inline assembly specified multiple times: a
+// Warning 4377: Value for @solidity tag in inline assembly specified multiple times: memory-safe-assembly
+// Warning 4430: Unknown inline assembly flag: "a"
+// Warning 4430: Unknown inline assembly flag: "b"
+// Warning 4430: Unknown inline assembly flag: "c"
+// Warning 4588: Assertion checker does not yet implement this type of function call.
+// Warning 5188: Assertion checker does not yet implement this operator.
+// Warning 5523: The SMTChecker pragma has been deprecated and will be removed in the future. Please use the "model checker engine" compiler setting to activate the SMTChecker instead. If the pragma is enabled, all engines will be used.
+// Warning 5574: Contract code size is 27192 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.
+// Warning 5574: Contract code size is 27209 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.
+// Warning 5574: Contract code size is 27220 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.
+// Warning 5667: Unused function parameter. Remove or comment out the variable name to silence this warning.
+// Warning 5667: Unused try/catch parameter. Remove or comment out the variable name to silence this warning.
+// Warning 5740: Unreachable code.
+// Warning 5805: "this" used in constructor. Note that external functions of a contract cannot be called while it is being constructed.
+// Warning 5815: Interface functions are implicitly "virtual"
+// Warning 5878: Failure condition of 'send' ignored. Consider using 'transfer' instead.
+// Warning 6031: Internal error: Expression undefined for SMT solver.
+// Warning 6133: Statement has no effect.
+// Warning 6162: Naming function type parameters is deprecated.
+// Warning 6269: Unexpected NatSpec tag "after" with value "bogus-value" in inline assembly.
+// Warning 6269: Unexpected NatSpec tag "before" with value "bogus-value" in inline assembly.
+// Warning 6269: Unexpected NatSpec tag "before" with value "@solidity a   memory-safe-assembly b    c           d" in inline assembly.
+// Warning 6269: Unexpected NatSpec tag "test" with value "test" in inline assembly.
+// Warning 6321: Unnamed return variable can remain unassigned. Add an explicit return with value to all non-reverting code paths or name the variable.
+// Warning 6321: Unnamed return variable can remain unassigned when the function is called when "B" is the most derived contract. Add an explicit return with value to all non-reverting code paths or name the variable.
+// Warning 6321: Unnamed return variable can remain unassigned when the function is called when "C" is the most derived contract. Add an explicit return with value to all non-reverting code paths or name the variable.
+// Warning 6417: The constructor of the contract (or its base) uses inline assembly. Because of that, it might be that the deployed bytecode is different from type(...).runtimeCode.
+// Warning 7229: Assertion checker does not yet implement the type function (uint256) returns (uint256) for comparisons
+// Warning 7238: This assignment performs two copies to storage. Since storage copies do not first copy to a temporary location, one of them might be overwritten before the second is executed and thus may have unexpected effects. It is safer to perform the copies separately or assign to storage pointers first.
+// Warning 7239: This assignment involves multiple accesses to a bytes array in storage while simultaneously enlarging it. When a bytes array is enlarged, it may transition from short storage layout to long storage layout, which invalidates all references to its elements. It is safer to only enlarge byte arrays in a single operation, one element at a time.
+// Warning 7325: Type function ()[984770902183611232881] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct b.c covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.P[101] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.P[102] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.P[103] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.P[104] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.Q0 covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.Q1 covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.Q3 covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.S0 covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.S[1048576] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.S1 covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type struct C.S covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[100000000000000000002] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[][100000000000000000003] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[100000000000000000004] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[100000000000000000006] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[][100000000000000000007] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[100000000000000000008] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[1][][100000000000000000001] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[1][][100000000000000000005] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[1267650600228229401496703205376] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[14474011154664524427946373126085988481658748083205070504932198000989141204992] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[18446744073709551616] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7325: Type uint256[57896044618658097711785492504343953926634992332820282019728792003956564819968] covers a large part of storage and thus makes collisions likely. Either use mappings or dynamic arrays and allow their size to be increased only in small quantities per transaction.
+// Warning 7507: Assertion checker does not yet support this expression.
+// Warning 7650: Assertion checker does not yet support this expression.
+// Warning 7737: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).
+// Warning 7828: Inline assembly has invalid NatSpec documentation.
+// Warning 8115: Assertion checker does not yet support the type of this variable.
+// Warning 8364: Assertion checker does not yet implement type function (function (uint256))
+// Warning 8364: Assertion checker does not yet implement type struct C.S storage pointer
+// Warning 8364: Assertion checker does not yet implement type struct C.S storage ref
+// Warning 8364: Assertion checker does not yet implement type struct C.T storage ref
+// Warning 8364: Assertion checker does not yet implement type struct Test.RecursiveStruct memory
+// Warning 8364: Assertion checker does not yet implement type type(int256[] memory)
+// Warning 8364: Assertion checker does not yet implement type type(int256[] memory[] memory)
+// Warning 8364: Assertion checker does not yet implement type type(int256[] memory[] memory[] memory)
+// Warning 8364: Assertion checker does not yet implement type type(struct test.s memory[7] memory)
+// Warning 8364: Assertion checker does not yet implement type type(uint256[7] memory)
+// Warning 8544: Inline assembly marked as memory safe using both a NatSpec tag and an assembly flag. If you are not concerned with backwards compatibility, only use the assembly flag, otherwise only use the NatSpec tag.
+// Warning 8760: This declaration has the same name as another declaration.
+// Warning 8787: Unexpected value for @solidity tag in inline assembly: a
+// Warning 8787: Unexpected value for @solidity tag in inline assembly: b
+// Warning 8787: Unexpected value for @solidity tag in inline assembly: c
+// Warning 8787: Unexpected value for @solidity tag in inline assembly: d
+// Warning 8787: Unexpected value for @solidity tag in inline assembly: test
+// Warning 9302: Return value of low-level calls not used.
+// Warning 9592: "switch" statement with only a default case.

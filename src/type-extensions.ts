@@ -16,7 +16,7 @@ export type Config = Record<string, WarningRule | FileRules>;
 
 declare module 'hardhat/types/config' {
   export interface HardhatUserConfig {
-    warnings?: Config;
+    warnings?: WarningRule | Config;
   }
 
   export interface HardhatConfig {

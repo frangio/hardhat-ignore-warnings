@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.4
+
+- Allow simpler configuration.
+
 # 0.2.3
 
 - Added `shadowing-opcode` warning id.

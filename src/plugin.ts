@@ -31,7 +31,11 @@ interface IgnoreRange {
 let classifier: WarningClassifier;
 
 extendConfig((config, userConfig) => {
-  config.warnings = userConfig.warnings ?? {};
+  let warnings = userConfig.warnings ?? {};
+  if (typeof warnings !== 'object') {
+    warnings = { '*': warnings };
+  }
+  config.warnings = warnings;
 });
 
 task(TASK_COMPILE_SOLIDITY_COMPILE_SOLC, async (args: { input: any }, hre, runSuper) => {
