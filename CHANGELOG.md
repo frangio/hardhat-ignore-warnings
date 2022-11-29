@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.5
+
+- Added `missing-receive` warning id.
+
 # 0.2.4
 
 - Allow simpler configuration.

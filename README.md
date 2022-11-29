@@ -78,3 +78,4 @@ Both inline comments and detailed configuration use the following set of names t
 - `func-mutability`: "Function state mutability can be restricted to pure/view."
 - `license`: "SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing "SPDX-License-Identifier: <SPDX-License>" to each source file. Use "SPDX-License-Identifier: UNLICENSED" for non-open-source code. Please see https://spdx.org for more information."
 - `pragma-solidity`: "Source file does not specify required compiler version!"
+- `missing-receive`: "This contract has a payable fallback function, but no receive ether function. Consider adding a receive ether function." -- To ignore this warning with a comment, it must be placed before the contract definition.

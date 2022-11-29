@@ -9,6 +9,7 @@ export const errorCodes = {
   'func-mutability': 2018,
   'license': 1878,
   'pragma-solidity': 3420,
+  'missing-receive': 3628,
 } as const;
 
 export type WarningId = number | keyof typeof errorCodes;

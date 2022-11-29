@@ -15,3 +15,10 @@ contract Lock {
         emit E();
     }
 }
+
+// solc-ignore-next-line missing-receive
+contract Payable {
+    function f() external {}
+
+    fallback() external payable {}
+}
