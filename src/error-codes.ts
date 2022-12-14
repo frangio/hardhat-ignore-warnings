@@ -2,6 +2,7 @@ export const errorCodes = {
   'unreachable': 5740,
   'unused-param': 5667,
   'unused-var': 2072,
+  'unused-call-retval': 9302,
   'code-size': 5574,
   'shadowing': 2519,
   'shadowing-builtin': 2319,

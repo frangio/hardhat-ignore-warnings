@@ -14,6 +14,11 @@ contract Lock {
     function bar(uint x) public {
         emit E();
     }
+
+    function a1() external {
+        // solc-ignore-next-line unused-call-retval
+        msg.sender.call("");
+    }
 }
 
 // solc-ignore-next-line missing-receive

@@ -71,6 +71,7 @@ Both inline comments and detailed configuration use the following set of names t
 - `unreachable`: "Unreachable code."
 - `unused-param`: "Unused function parameter. Remove or comment out the variable name to silence this warning."
 - `unused-var`: "Unused local variable."
+- `unused-call-retval`: "Return value of low-level calls not used."
 - `code-size`: "Contract code size is _N_ bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries."
 - `shadowing`: "This declaration shadows an existing declaration."
 - `shadowing-builtin`: "This declaration shadows a builtin symbol."
