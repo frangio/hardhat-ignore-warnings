@@ -60,6 +60,7 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
       if (e.severity !== 'warning' || !e.sourceLocation) {
         return [e];
       }
+      if (!e.errorCode) { return [e]; }
       const rule = classifier.getWarningRule(parseInteger(e.errorCode), e.sourceLocation);
       if (rule === 'off') {
         return [];
