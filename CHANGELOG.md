@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.7
+
+- Avoid type error on older Solidity versions.
+
 # 0.2.6
 
 - Added `unused-call-retval` warning id for "Return value of low-level calls not used".

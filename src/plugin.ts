@@ -12,7 +12,7 @@ import type { WarningClassifier } from '.';
 
 interface SolcError {
   severity: string;
-  errorCode: string;
+  errorCode?: string;
   sourceLocation?: SourceLocation;
 }
 
@@ -57,7 +57,7 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
     ...output,
     errors: output.errors?.flatMap((e: SolcError) => {
       // Make sure not to filter out errors
-      if (e.severity !== 'warning' || !e.sourceLocation) {
+      if (e.severity !== 'warning' || !e.sourceLocation || e.errorCode === undefined) {
         return [e];
       }
       const rule = classifier.getWarningRule(parseInteger(e.errorCode), e.sourceLocation);
