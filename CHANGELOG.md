@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.8
+
+- Allow ignoring warnings in older Solidity versions.
+
 # 0.2.7
 
 - Avoid type error on older Solidity versions.

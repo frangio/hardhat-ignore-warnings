@@ -57,7 +57,7 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
     ...output,
     errors: output.errors?.flatMap((e: SolcError) => {
       // Make sure not to filter out errors
-      if (e.severity !== 'warning' || !e.sourceLocation || e.errorCode === undefined) {
+      if (e.severity !== 'warning' || !e.sourceLocation) {
         return [e];
       }
       const rule = classifier.getWarningRule(parseInteger(e.errorCode), e.sourceLocation);
@@ -74,8 +74,10 @@ task(TASK_COMPILE_SOLIDITY_CHECK_ERRORS, async ({ output, ...params }: { output:
   return runSuper({ output, ...params });
 });
 
-function parseInteger(n: string): number {
-  if (/^\d+$/.test(n)) {
+function parseInteger(n?: string): number | undefined {
+  if (n === undefined) {
+    return undefined;
+  } else if (/^\d+$/.test(n)) {
     return Number(n);
   } else {
     throw new Error(`Expected integer but got '${n}'`)

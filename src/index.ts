@@ -46,15 +46,15 @@ export class WarningClassifier {
     this.rules = lazyObject(() => sortFileRules(config));
   }
 
-  getWarningRule(errorCode: number, sourceLocation: SourceLocation): NormalizedWarningRule {
+  getWarningRule(errorCode: number | undefined, sourceLocation: SourceLocation): NormalizedWarningRule {
     const { file, start } = sourceLocation;
-    const ignored = this.ignoreRanges[file]?.search(start, start).includes(errorCode);
+    const ignored = errorCode !== undefined && this.ignoreRanges[file]?.search(start, start).includes(errorCode);
     if (ignored) {
       return 'off';
     }
     for (const rule of this.rules) {
       if (minimatch(file, rule.pattern, { matchBase: true })) {
-        const r = rule.rules[errorCode] ?? rule.rules.default;
+        const r = (errorCode !== undefined && rule.rules[errorCode]) || rule.rules.default;
         if (r) return r;
       }
     }
