@@ -4,6 +4,7 @@ export const errorCodes = {
   'unused-var': 2072,
   'unused-call-retval': 9302,
   'code-size': 5574,
+  'initcode-size': 3860,
   'shadowing': 2519,
   'shadowing-builtin': 2319,
   'shadowing-opcode': 8261,

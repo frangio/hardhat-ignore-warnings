@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.9
+
+- Added `initcode-size` warning id for EIP-3860 initcode size limit.
+
 # 0.2.8
 
 - Allow ignoring warnings in older Solidity versions.
