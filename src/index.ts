@@ -66,13 +66,14 @@ export class WarningClassifier {
 
     const { comments } = analyze(contents);
     const buf = Buffer.from(contents, 'utf8');
+    const endOfLine = buf.indexOf('\r\n') >= 0 ? 2 : 1;
 
     for (const c of comments) {
       const t = c.text.replace(/^\/\/\s+/, '');
       const m = t.match(/^solc-ignore-next-line (.*)/);
       if (m) {
         const ids = m[1]!.trim().split(/\s+/);
-        const start = c.end + 1;
+        const start = c.end + endOfLine;
         const nextNewline = buf.indexOf('\n', start);
         const end = nextNewline >= 0 ? nextNewline : buf.length;
         for (const id of ids) {
