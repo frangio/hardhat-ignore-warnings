@@ -12,6 +12,7 @@ export const errorCodes = {
   'license': 1878,
   'pragma-solidity': 3420,
   'missing-receive': 3628,
+  'transcient-storage': 2394,
 } as const;
 
 export type WarningId = number | keyof typeof errorCodes;
