@@ -2,7 +2,7 @@
 
 # Unreleased
 
-- Added `transcient-storage` warning id.
+- Added `transient-storage` warning id.
 
 # 0.2.9
 
