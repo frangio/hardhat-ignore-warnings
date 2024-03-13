@@ -72,7 +72,8 @@ export class WarningClassifier {
       const m = t.match(/^solc-ignore-next-line (.*)/);
       if (m) {
         const ids = m[1]!.trim().split(/\s+/);
-        const start = c.end + 1;
+        const lineEnd = buf.toString('utf8', c.end, c.end + 2);
+        const start = c.end + (lineEnd === '\r\n' ? 2 : 1);
         const nextNewline = buf.indexOf('\n', start);
         const end = nextNewline >= 0 ? nextNewline : buf.length;
         for (const id of ids) {

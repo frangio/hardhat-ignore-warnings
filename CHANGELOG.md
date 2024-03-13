@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.11
+
+- Added CRLF support for inline comments.
+
 # 0.2.10
 
 - Added `transient-storage` warning id.
