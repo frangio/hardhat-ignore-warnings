@@ -14,7 +14,7 @@
     "prepare": "npm run build"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "hardhat": "^2.11.1",
     "typescript": "^4.8.3"
   },
