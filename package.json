@@ -1,6 +1,6 @@
 {
   "name": "hardhat-ignore-warnings",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Hardhat plugin to ignore Solidity warnings",
   "author": "Francisco Giordano <fg@frang.io>",
   "license": "MIT",

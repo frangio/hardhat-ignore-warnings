@@ -1,5 +1,10 @@
 # Changelog
 
+# 0.2.12
+
+- Added `statement-has-no-effect` warning id.
+
+
 # 0.2.11
 
 - Added CRLF support for inline comments.
