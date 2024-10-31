@@ -19,6 +19,11 @@ contract Lock {
         // solc-ignore-next-line unused-call-retval
         msg.sender.call("");
     }
+
+    function z2() external pure {
+        // solc-ignore-next-line statement-has-no-effect
+        "hello world";
+    }
 }
 
 // solc-ignore-next-line missing-receive

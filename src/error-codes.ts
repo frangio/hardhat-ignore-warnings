@@ -13,6 +13,7 @@ export const errorCodes = {
   'pragma-solidity': 3420,
   'missing-receive': 3628,
   'transient-storage': 2394,
+  'statement-has-no-effect': 6133,
 } as const;
 
 export type WarningId = number | keyof typeof errorCodes;
