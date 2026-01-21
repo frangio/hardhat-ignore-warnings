@@ -1,9 +1,20 @@
-import { lazyObject } from 'hardhat/plugins';
-import minimatch from 'minimatch';
-import IntervalTree from 'node-interval-tree';
+import { minimatch } from 'minimatch';
+import { IntervalTree } from 'node-interval-tree';
 import { analyze } from 'solidity-comments';
-import { getErrorCode } from './error-codes';
-import { Config, FileRules, WarningRule } from './type-extensions';
+import { getErrorCode } from './error-codes.js';
+import type { WarningConfig, FileRules, WarningRule } from './type-extensions.d.ts';
+
+class RangeTree {
+  tree: IntervalTree<{ low: number, high: number, code: number }> = new IntervalTree();
+
+  insert(low: number, high: number, code: number): boolean {
+    return this.tree.insert({ low, high, code })
+  }
+
+  search(low: number, high: number): number[] {
+    return this.tree.search(low, high).map(r => r.code);
+  }
+}
 
 const defaultRule: NormalizedWarningRule = 'warn';
 
@@ -20,12 +31,6 @@ type SortedFileRules = {
   rules: NormalizedFileRules;
 }[];
 
-interface SolcError {
-  severity: string;
-  errorCode: string;
-  sourceLocation?: SourceLocation;
-}
-
 interface SourceLocation {
   file: string;
   start: number;
@@ -40,10 +45,10 @@ interface IgnoreRange {
 
 export class WarningClassifier {
   private rules: SortedFileRules;
-  private ignoreRanges: Record<string, IntervalTree<number>> = {};
+  private ignoreRanges: Record<string, RangeTree> = {};
 
-  constructor(private config: Config) {
-    this.rules = lazyObject(() => sortFileRules(config));
+  constructor(config: WarningConfig) {
+    this.rules = sortFileRules(config);
   }
 
   getWarningRule(errorCode: number | undefined, sourceLocation: SourceLocation): NormalizedWarningRule {
@@ -52,8 +57,10 @@ export class WarningClassifier {
     if (ignored) {
       return 'off';
     }
+    // Strip 'project/' prefix that Hardhat v3 adds to paths
+    const normalizedFile = file.replace(/^project\//, '');
     for (const rule of this.rules) {
-      if (minimatch(file, rule.pattern, { matchBase: true })) {
+      if (minimatch(normalizedFile, rule.pattern, { matchBase: true })) {
         const r = (errorCode !== undefined && rule.rules[errorCode]) || rule.rules.default;
         if (r) return r;
       }
@@ -86,7 +93,7 @@ export class WarningClassifier {
     if (ranges.length === 0) {
       delete this.ignoreRanges[file];
     } else {
-      const tree = this.ignoreRanges[file] = new IntervalTree();
+      const tree = this.ignoreRanges[file] = new RangeTree();
       for (const { start, end, code } of ranges) {
         tree.insert(start, end, code);
       }
@@ -113,7 +120,7 @@ function normalizeFileRules(rules: WarningRule | FileRules) {
   }
 }
 
-function sortFileRules(config: Config): SortedFileRules {
+function sortFileRules(config: WarningConfig): SortedFileRules {
   const rules = Object.entries(config).map(([pattern, rules]) => ({ pattern, rules: normalizeFileRules(rules) }));
   rules.sort((a, b) => (
     minimatch(a.pattern, b.pattern, { matchBase: true })

@@ -4,6 +4,7 @@
   "description": "Hardhat plugin to ignore Solidity warnings",
   "author": "Francisco Giordano <fg@frang.io>",
   "license": "MIT",
+  "type": "module",
   "main": "dist/plugin.js",
   "files": [
     "dist",
@@ -14,13 +15,17 @@
     "prepare": "npm run build"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
-    "hardhat": "^2.11.1",
-    "typescript": "^4.8.3"
+    "@tsconfig/node22": "^22.0.5",
+    "@types/node": "^22.19.7",
+    "hardhat": "*",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "minimatch": "^5.1.0",
+    "minimatch": "^10.1.1",
     "node-interval-tree": "^2.0.1",
     "solidity-comments": "^0.0.2"
+  },
+  "peerDependencies": {
+    "hardhat": "^3.1.0"
   }
 }

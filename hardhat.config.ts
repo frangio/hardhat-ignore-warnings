@@ -1,11 +1,13 @@
 import { HardhatUserConfig } from 'hardhat/config';
 
-import '@nomicfoundation/hardhat-toolbox';
+import plugin from './src/plugin.js';
 
-import './src/plugin';
+// Skip dependency check
+plugin.npmPackage = null;
 
 export default <HardhatUserConfig> {
   solidity: "0.8.9",
+  plugins: [plugin],
   warnings: {
     'Ignored.sol': 'off',
     'contracts/IgnoredLicense.sol': { 'license': 'off' },

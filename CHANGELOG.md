@@ -1,9 +1,12 @@
 # Changelog
 
+# 0.3.0
+
+- Migrated to Hardhat v3.
+
 # 0.2.12
 
 - Added `statement-has-no-effect` warning id.
-
 
 # 0.2.11
 
