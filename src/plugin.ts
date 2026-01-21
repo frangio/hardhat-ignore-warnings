@@ -3,7 +3,7 @@ import type { HookContext } from 'hardhat/types/hooks';
 import type { HardhatConfig, HardhatUserConfig, SolcConfig, ConfigurationVariableResolver } from 'hardhat/types/config';
 import type { RunCompilationJobResult, CompilerInput, CompilerOutput, CompilerOutputError } from 'hardhat/types/solidity';
 
-import type {} from './type-extensions.d.ts';
+import './type-extensions.js';
 
 interface ErrorSourceLocation {
   sourceLocation?: SourceLocation;
