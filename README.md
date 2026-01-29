@@ -9,13 +9,16 @@ Actual compilation errors will not be silenced by the plugin.
 You can turn off all Solidity warnings by installing the plugin and configuring it as follows.
 
 ```diff
- // hardhat.config.js
+ // hardhat.config.ts
 
-+require('hardhat-ignore-warnings');
++import hardhatIgnoreWarnings from "hardhat-ignore-warnings";
 
- module.exports = {
-+  warnings: 'off',
- };
+ export default defineConfig({
+   plugins: [
++    hardhatIgnoreWarnings,
+   ],
++  warnings: "off",
+ });
 ```
 
 ## Customization
